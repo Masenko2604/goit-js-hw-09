@@ -5,8 +5,7 @@ const refs = {
   form: document.querySelector('form.form'),
   delay: document.querySelector('[name="delay"]'),
   step: document.querySelector('[name="step"]'),
-  amount: document.querySelector('[name="amount"]'),
-}
+  amount: document.querySelector('[name="amount"]'),}
 
 refs.body.style.backgroundColor = '#f7eff4';
 refs.form.addEventListener('click', onPromiseCreate);
@@ -36,10 +35,10 @@ function onPromiseCreate(e) {
 
     createPromise(i, promiseDelay)
       .then(({ position, delay }) => {
-        Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
+        Notify.success(`Fulfilled promise ${position} in ${delay}ms`);
       })
       .catch(({ position, delay }) => {
-        Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
+        Notify.failure(`Rejected promise ${position} in ${delay}ms`);
       });
   }
 }

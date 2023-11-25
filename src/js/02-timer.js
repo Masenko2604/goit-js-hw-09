@@ -29,7 +29,7 @@ const options = {
       selectedDate = selectedDates[0].getTime();
       startBtn.disabled = false;
       Report.success(
-        '🥰 Congratulation! Click on start!',
+        'Congratulation! Click on start!',
         '"Do not try to become a person of success but try to become a person of value." <br/><br/>- Albert Einstein',
         'Okay'
       );
@@ -40,7 +40,7 @@ const options = {
 const fp = flatpickr(flatpickrInput, options);
 
 Report.info(
-  '👋 Greeting, my Friend!',
+  'Greeting, my Friend!',
   'Please, choose a date and click on start',
   'Okay'
 );
