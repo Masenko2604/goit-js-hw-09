@@ -10,19 +10,16 @@ let currentDate = null;
 
 
 
-const refs = {
-  dateInput: document.querySelector('input#datetime-picker'),
-  btnStartTimer: document.querySelector('button[data-start-timer]'),
-  daysRemaining: document.querySelector('[data-days]'),
-  hoursRemaining: document.querySelector('[data-hours]'),
-  minutesRemaining: document.querySelector('[data-minutes]'),
-  secondsRemaining: document.querySelector('[data-seconds]'),
-};
+const startBtn = document.querySelector('[data-start-timer]');
+const dataDays = document.querySelector('[data-days]');
+const dataHours = document.querySelector('[data-hours]');
+const dataMinutes = document.querySelector('[data-minutes]');
+const dataSeconds = document.querySelector('[data-seconds]');
 
-refs.btnStartTimer.disabled = true;
-refs.btnStartTimer.addEventListener('click', timerStart);
+const flatpickrInput = document.querySelector('#datetime-picker');
 
-let remainingTime = 0;
+startBtn.disabled = true;
+startBtn.addEventListener('click', onStartCounter);
 
 const options = {
   enableTime: true,
@@ -30,11 +27,25 @@ const options = {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    onDateCheck(selectedDates);
+    if (selectedDates[0].getTime() < Date.now()) {
+      Report.failure(
+        '🥺 Ooops...',
+        'Please, choose a date in the future and remember: "Knowledge rests not upon truth alone, but upon error also." - Carl Gustav Jung',
+        'Okay'
+      );
+    } else {
+      selectedDate = selectedDates[0].getTime();
+      startBtn.disabled = false;
+      Report.success(
+        '🥰 Congratulation! Click on start!',
+        '"Do not try to become a person of success but try to become a person of value." <br/><br/>- Albert Einstein',
+        'Okay'
+      );
+    }
   },
 };
 
-flatpickr(refs.dateInput, options);
+const fp = flatpickr(flatpickrInput, options);
 
 Report.info(
   '👋 Greeting, my Friend!',
@@ -42,58 +53,8 @@ Report.info(
   'Okay'
 );
 
-function onDateCheck(selectedDates) {
-  selectedDate = selectedDates[0].getTime();
-  currentDate = new Date().getTime();
-
-  if (selectedDate > currentDate) {
-    refs.btnStartTimer.disabled = false;
-    Report.success(
-      '🥰 Congratulation! Click on start!',
-      '"Do not try to become a person of success but try to become a person of value." <br/><br/>- Albert Einstein',
-      'Okay'
-    );
-    return;
-  }
-  Report.failure(
-    '🥺 Ooops...',
-    'Please, choose a date in the future and remember: "Knowledge rests not upon truth alone, but upon error also." - Carl Gustav Jung',
-    'Okay'
-  );
-}
-
-function timerStart() {
-  intervalId = setInterval(() => {
-    currentDate = new Date().getTime();
-    if (selectedDate - currentDate <= 1000) {
-      clearInterval(intervalId);
-      refs.btnStartTimer.disabled = true;
-      refs.dateInput.disabled = false;
-      Report.info(
-        '👏 Congratulation! Timer stopped!',
-        'Please, if you want to start timer, choose a date and click on start or reload this page',
-        'Okay'
-      );
-      return;
-    } else {
-      refs.btnStartTimer.disabled = true;
-      refs.dateInput.disabled = true;
-      currentDate += 1000;
-      remainingTime = Math.floor(selectedDate - currentDate);
-      convertMs(remainingTime);
-    }
-  }, TIMER_DELAY);
-}
-
-function createMarkup({ days, hours, minutes, seconds }) {
-  refs.daysRemaining.textContent = days;
-  refs.hoursRemaining.textContent = hours;
-  refs.minutesRemaining.textContent = minutes;
-  refs.secondsRemaining.textContent = seconds;
-}
-
-function addLeadingZero(value) {
-  return String(value).padStart(2, '0');
+function onStartCounter() {
+  counter.start();
 }
 
 function convertMs(ms) {
@@ -108,6 +69,46 @@ function convertMs(ms) {
   const seconds = addLeadingZero(
     Math.floor((((ms % day) % hour) % minute) / second)
   );
-  createMarkup({ days, hours, minutes, seconds });
+
   return { days, hours, minutes, seconds };
 }
+
+const counter = {
+  start() {
+    intervalId = setInterval(() => {
+      currentDate = Date.now();
+      const deltaTime = selectedDate - currentDate;
+      updateTimerface(convertMs(deltaTime));
+      startBtn.disabled = true;
+      flatpickrInput.disabled = true;
+
+      if (deltaTime <= 1000) {
+        this.stop();
+        Report.info(
+          '👏 Congratulation! Timer stopped!',
+          'Please, if you want to start timer, choose a date and click on start or reload this page',
+          'Okay'
+        );
+      }
+    }, TIMER_DELAY);
+  },
+
+  stop() {
+    startBtn.disabled = true;
+    flatpickrInput.disabled = false;
+    clearInterval(intervalId);
+    return;
+  },
+};
+
+function updateTimerface({ days, hours, minutes, seconds }) {
+  dataDays.textContent = `${days}`;
+  dataHours.textContent = `${hours}`;
+  dataMinutes.textContent = `${minutes}`;
+  dataSeconds.textContent = `${seconds}`;
+}
+
+function addLeadingZero(value) {
+  return String(value).padStart(2, '0');
+}
+
