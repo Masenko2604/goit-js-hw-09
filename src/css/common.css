@@ -25,16 +25,16 @@ input#datetime-picker {
   box-shadow: 0 6px 8px #c4b59d, 0 -2px 1px #fff;
 
   text-align: center;
-  color: #fb0404;
+  color: #173510;
   font-weight: 600;
 }
 
 input#datetime-picker[disabled] {
-  color: #ab803c;
+  color: rgb(168, 177, 223);
 }
 
 [disabled] {
-  color: #ab803c;
+  color: rgb(168, 177, 223);
   animation: none;
 }
 
@@ -42,13 +42,13 @@ button {
   display: inline-block;
   width: 48px;
   height: 48px;
-  border-radius: 50%;
+  border-radius: 10%;
   border: none;
   font-size: 14px;
   cursor: pointer;
-  color: #fb0404;
+  /* color: #fb0404;
   box-shadow: inset 0 3px 4px #ffffff, inset 0 -3px 4px #c4b59d;
-  transform: all 300ms linear;
+  transform: all 300ms linear; */
 }
 
 button[data-start],
@@ -57,7 +57,7 @@ button[data-stop] {
 }
 
 button[disabled] {
-  color: #ab803c;
+  color: rgb(168, 177, 223);
   animation: none;
 }
 
@@ -100,7 +100,7 @@ button[type='submit'] {
   -webkit-filter: drop-shadow(3.4px 3.4px 3.4px rgb(183, 177, 181)) drop-shadow(-3.4px -3.4px 3.4px white);
   box-shadow: inset 4.3px 4.3px 7px #fff;
 
-  color: #ff0505;
+  color: #173510;
   text-shadow: 1px 1.6px 1px #fff;
 }
 
@@ -146,7 +146,7 @@ button[type='submit']:active {
 }
 
 .flatpickr-months {
-  background-color: antiquewhite;
+  background-color: rgb(215, 232, 250);
 }
 
 span.flatpickr-day.selected,
@@ -157,7 +157,7 @@ span.flatpickr-day.selected:hover {
 }
 
 .flatpickr-day.today.selected {
-  background: antiquewhite;
+  background: rgb(215, 238, 250);
   border-color: #ff0505;
   color: #ab803c;
 }
