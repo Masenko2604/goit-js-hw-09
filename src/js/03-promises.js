@@ -31,26 +31,18 @@ function onPromiseCreate(e) {
   let valueDelay = Number(refs.delay.value);
   let step = Number(refs.step.value);
   let amount = Number(refs.amount.value);
-
-  let i = 1;
   
-  function createNextPromise() {
-    if (i <= amount) {
-      let promiseDelay = valueDelay + step * i;
 
-      createPromise(i, promiseDelay)
-        .then(({ position, delay }) => {
-          Notify.success(`Fulfilled promise ${position} in ${delay}ms`);
-        })
-        .catch(({ position, delay }) => {
-          Notify.failure(`Rejected promise ${position} in ${delay}ms`);
-        })
-        .finally(() => {
-          i += 1;
-          createNextPromise();
-        });
-    }
+  for (let i = 0; i < amount; i += 1) {
+    let promiseDelay = valueDelay + step * i;
+
+    createPromise(i + 1, promiseDelay)
+      .then(({ position, delay }) => {
+        Notify.success(`Fulfilled promise ${position} in ${delay}ms`);
+      })
+      .catch(({ position, delay }) => {
+        Notify.failure(`Rejected promise ${position} in ${delay}ms`);
+      });
   }
-
-  createNextPromise();
+  
 }
